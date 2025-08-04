@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: pybot-host-web
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:flask_app
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: TOKEN
+        value: your_telegram_bot_token
+
+  - type: worker
+    name: pybot-host-worker
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python main.py
