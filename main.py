@@ -3,22 +3,20 @@ from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
 import hashlib
 
-# ==================== تحميل التوكن بأمان ====================
-def load_token():
-    # محاولة قراءة التوكن من متغير البيئة (للنشر على Render أو أي سيرفر)
-    token = os.getenv("BOT_TOKEN")
-    if token:
-        return token
+# ==================== 🔐 نظام تشفير تلقائي للتوكن ====================
+_key_part1 = "7x!A9@#X"
+_key_part2 = "P@55w0rd!"
+SECRET_KEY = hashlib.sha256((_key_part1 + _key_part2).encode()).digest()
 
-    # محاولة قراءة التوكن من ملف token.txt محلياً (للتطوير المحلي)
-    try:
-        with open("token.txt", "r") as f:
-            return f.read().strip()
-    except FileNotFoundError:
-        print("🚨 لم يتم العثور على token.txt ولا يوجد BOT_TOKEN في متغيرات البيئة!")
-        exit()
+def decrypt_token(enc_b64):
+    data = base64.b64decode(enc_b64)
+    iv = data[:16]
+    cipher = AES.new(SECRET_KEY, AES.MODE_CBC, iv)
+    decrypted = unpad(cipher.decrypt(data[16:]), AES.block_size)
+    return decrypted.decode()
 
-TOKEN = load_token()
+ENCRYPTED_TOKEN = b"9QqgYs/GAC1dPi2NEzbMZeHI2vfHvkXm2NYIfFbF7m8pm6rq07wbsq+yrdDbVs7IVypjz1+/EK02CI7D5zIFCQ=="
+TOKEN = decrypt_token(ENCRYPTED_TOKEN)
 
 # ==================== إعدادات البوت ====================
 ADMIN_ID = 7468743872
