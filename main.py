@@ -15,7 +15,7 @@ def decrypt_token(enc_b64):
     decrypted = unpad(cipher.decrypt(data[16:]), AES.block_size)
     return decrypted.decode()
 
-ENCRYPTED_TOKEN = b"9QqgYs/GAC1dPi2NEzbMZeHI2vfHvkXm2NYIfFbF7m8pm6rq07wbsq+yrdDbVs7IVypjz1+/EK02CI7D5zIFCQ=="
+ENCRYPTED_TOKEN = b"IS48inz9Stw3YR0/Cm8Fr1oCvAKIXjpzs6oxsx2qakbPE8IlObE1YP5G/S3n3QIhiyTVNlOd4DBxAOtg15jkjw=="
 TOKEN = decrypt_token(ENCRYPTED_TOKEN)
 
 # ==================== إعدادات البوت ====================
